@@ -7,8 +7,8 @@ namespace Chess
 	{
 		static void Main(string[] args)
 		{
-			Position p = new Position(3, 4);
-			Console.WriteLine(p);
+			ChessBoard board = new ChessBoard(8, 8);
+			Screen.PrintBoard(board);
 		}
 	}
 }
