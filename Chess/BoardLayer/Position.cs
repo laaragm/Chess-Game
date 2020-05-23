@@ -21,5 +21,11 @@ namespace Chess.Board
 				+ ", "
 				+ Column;
 		}
+
+		public void DefineValues(int row, int column)
+		{
+			Row = row;
+			Column = column;
+		}
 	}
 }

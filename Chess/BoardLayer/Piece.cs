@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Chess.Board
 {
-	class Piece
+	abstract class Piece
 	{
 		public Position Position { get; set; }
 		public Color Color { get; protected set; }
@@ -22,6 +22,18 @@ namespace Chess.Board
 		public void IncreaseMovementCount()
 		{
 			MovementsCount++;
+		}
+
+		public void DecreaseMovementCount()
+		{
+			MovementsCount--;
+		}
+
+		public abstract bool[,] PossibleMovements();
+
+		public bool PossibleMovement(Position position)
+		{
+			return PossibleMovements()[position.Row, position.Column];
 		}
 	}
 }
