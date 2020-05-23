@@ -9,6 +9,8 @@ namespace Chess
 		static void Main(string[] args)
 		{
 			ChessBoard board = new ChessBoard(8, 8);
+			ChessPosition p1 = new ChessPosition('c', 7);
+			Console.WriteLine(p1.ToPosition());
 
 			try
 			{
