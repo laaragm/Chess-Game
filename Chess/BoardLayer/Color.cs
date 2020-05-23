@@ -7,7 +7,6 @@ namespace Chess.Board
 	enum Color
 	{
 		White,
-		Black,
-		Yellow
+		Black
 	}
 }

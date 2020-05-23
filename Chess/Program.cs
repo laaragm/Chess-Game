@@ -8,17 +8,23 @@ namespace Chess
 	{
 		static void Main(string[] args)
 		{
-			ChessBoard board = new ChessBoard(8, 8);
-
 			try
 			{
-				board.AddPiece(new Rook(board, Color.Black), new Position(0, 0));
-				board.AddPiece(new Rook(board, Color.Black), new Position(1, 3));
-				board.AddPiece(new King(board, Color.Black), new Position(0, 2));
+				ChessMatch match = new ChessMatch();
 
-				board.AddPiece(new Rook(board, Color.White), new Position(3, 5));
+				while (!match.EndedMatch)
+				{
+					Console.Clear();
+					Screen.PrintBoard(match.Board);
 
-				Screen.PrintBoard(board);
+					Console.WriteLine();
+					Console.Write("Origin: ");
+					Position origin = Screen.ReadChessPosition().ToPosition();
+					Console.Write("Destination: ");
+					Position destination = Screen.ReadChessPosition().ToPosition();
+
+					match.ExecuteMovement(origin, destination);
+				}
 			}
 			catch (BoardException exception)
 			{
