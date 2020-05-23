@@ -7,25 +7,41 @@ namespace Chess
 {
 	class Screen
 	{
-		public static void PrintBoard(ChessBoard Board)
+		public static void PrintBoard(ChessBoard board)
 		{
-			for (int i = 0; i < Board.Rows; i++)
+			for (int i = 0; i < board.Rows; i++)
 			{
-				for (int j = 0; j < Board.Columns; j++)
+				Console.Write(8 - i + " ");
+				for (int j = 0; j < board.Columns; j++)
 				{
-					if (Board.Piece(i, j) == null)
+					if (board.Piece(i, j) == null)
 					{
 						Console.Write("- "); 
 					}
 					else
 					{
-						Console.Write(Board.Piece(i, j) + " ");
+						PrintPiece(board.Piece(i, j));
+						Console.Write(" ");
 					}
 				}
 				Console.WriteLine();
 			}
+			Console.WriteLine("  a b c d e f g h");
+		}
 
-			
+		public static void PrintPiece(Piece piece)
+		{
+			if (piece.Color == Color.White)
+			{
+				Console.Write(piece);
+			}
+			else
+			{
+				ConsoleColor aux = Console.ForegroundColor; //get the console's actual color 
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.Write(piece);
+				Console.ForegroundColor = aux;
+			}
 		}
 	}
 }
