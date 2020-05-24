@@ -3,24 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Chess
+namespace Chess.ChessLayer
 {
-	class Rook : Piece
+	class Bishop : Piece
 	{
-		public Rook(ChessBoard Board, Color Color) : base(Board, Color)
+		public Bishop(ChessBoard board, Color color) : base(board, color)
 		{
 
 		}
 
 		public override string ToString()
 		{
-			return "R";
+			return "B";
 		}
 
 		private bool AllowedToMove(Position position)
 		{
 			Piece piece = Board.Piece(position);
-			return piece == null || piece.Color != Color;
+			return (piece == null) || (piece.Color != Color);
 		}
 
 		public override bool[,] PossibleMovements()
@@ -28,9 +28,9 @@ namespace Chess
 			bool[,] matrix = new bool[Board.Rows, Board.Columns];
 
 			Position position = new Position(0, 0);
-
-			//North
-			position.DefineValues(Position.Row - 1, Position.Column);
+			
+			//North-East
+			position.DefineValues(Position.Row - 1, Position.Column + 1);
 			while (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
@@ -38,11 +38,11 @@ namespace Chess
 				{
 					break;
 				}
-				position.Row--;
+				position.DefineValues(position.Row - 1, position.Column - 1);
 			}
 
-			//South
-			position.DefineValues(Position.Row + 1, Position.Column);
+			//South-East
+			position.DefineValues(Position.Row + 1, Position.Column + 1);
 			while (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
@@ -50,11 +50,11 @@ namespace Chess
 				{
 					break;
 				}
-				position.Row++;
+				position.DefineValues(position.Row + 1, position.Column + 1);
 			}
 
-			//East
-			position.DefineValues(Position.Row, Position.Column + 1);
+			//South-West
+			position.DefineValues(Position.Row + 1, Position.Column - 1);
 			while (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
@@ -62,11 +62,11 @@ namespace Chess
 				{
 					break;
 				}
-				position.Column++;
+				position.DefineValues(position.Row + 1, position.Column - 1);
 			}
 
-			//West
-			position.DefineValues(Position.Row, Position.Column - 1);
+			//North-West
+			position.DefineValues(Position.Row - 1, Position.Column - 1);
 			while (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
@@ -74,12 +74,10 @@ namespace Chess
 				{
 					break;
 				}
-				position.Column--;
+				position.DefineValues(position.Row - 1, position.Column - 1);
 			}
 
 			return matrix;
 		}
-
-
 	}
 }

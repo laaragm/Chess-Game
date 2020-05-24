@@ -30,6 +30,7 @@ namespace Chess
 			PrintCapturedPieces(match);
 			Console.WriteLine();
 			Console.WriteLine("Turn: " + match.Turn);
+
 			if (!match.EndedMatch)
 			{
 				Console.WriteLine("Waiting for movement: " + match.ActualPlayer);
@@ -38,8 +39,11 @@ namespace Chess
 					Console.WriteLine("Check!");
 				}
 			}
-			Console.WriteLine("Checkmate!");
-			Console.WriteLine("Winner: " + match.ActualPlayer);
+			else
+			{
+				Console.WriteLine("Checkmate!");
+				Console.WriteLine("Winner: " + match.ActualPlayer);
+			}
 		}
 
 		private static void PrintCapturedPieces(ChessMatch match)

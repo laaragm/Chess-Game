@@ -4,6 +4,7 @@ using Chess.BoardLayer;
 using System.Text;
 using System.Collections.Generic;
 using Chess.Board;
+using Chess.ChessLayer;
 
 namespace Chess
 {
@@ -38,19 +39,40 @@ namespace Chess
 
 		private void GetBoardReady()
 		{
-			AddNewPiece('c', 1, new Rook(Board, Color.White));
-			AddNewPiece('c', 2, new Rook(Board, Color.White));
-			AddNewPiece('d', 2, new Rook(Board, Color.White));
-			AddNewPiece('e', 2, new Rook(Board, Color.White));
-			AddNewPiece('e', 1, new Rook(Board, Color.White));
-			AddNewPiece('d', 1, new King(Board, Color.White));
+			AddNewPiece('a', 1, new Rook(Board, Color.White));
+			AddNewPiece('b', 1, new Knight(Board, Color.White));
+			AddNewPiece('c', 1, new Bishop(Board, Color.White));
+			AddNewPiece('d', 1, new Queen(Board, Color.White));
+			AddNewPiece('e', 1, new King(Board, Color.White));
+			AddNewPiece('f', 1, new Bishop(Board, Color.White));
+			AddNewPiece('g', 1, new Knight(Board, Color.White));
+			AddNewPiece('h', 1, new Rook(Board, Color.White));
+			AddNewPiece('a', 2, new Pawn(Board, Color.White));
+			AddNewPiece('b', 2, new Pawn(Board, Color.White));
+			AddNewPiece('c', 2, new Pawn(Board, Color.White));
+			AddNewPiece('d', 2, new Pawn(Board, Color.White));
+			AddNewPiece('e', 2, new Pawn(Board, Color.White));
+			AddNewPiece('f', 2, new Pawn(Board, Color.White));
+			AddNewPiece('g', 2, new Pawn(Board, Color.White));
+			AddNewPiece('h', 2, new Pawn(Board, Color.White));
 
-			AddNewPiece('c', 7, new Rook(Board, Color.Black));
-			AddNewPiece('c', 8, new Rook(Board, Color.Black));
-			AddNewPiece('d', 7, new Rook(Board, Color.Black));
-			AddNewPiece('e', 7, new Rook(Board, Color.Black));
-			AddNewPiece('e', 8, new Rook(Board, Color.Black));
-			AddNewPiece('d', 8, new King(Board, Color.Black));
+
+			AddNewPiece('a', 8, new Rook(Board, Color.Black));
+			AddNewPiece('b', 8, new Knight(Board, Color.Black));
+			AddNewPiece('c', 8, new Bishop(Board, Color.Black));
+			AddNewPiece('d', 8, new Queen(Board, Color.Black));
+			AddNewPiece('e', 8, new King(Board, Color.Black));
+			AddNewPiece('f', 8, new Bishop(Board, Color.Black));
+			AddNewPiece('g', 8, new Knight(Board, Color.Black));
+			AddNewPiece('h', 8, new Rook(Board, Color.Black));
+			AddNewPiece('a', 7, new Pawn(Board, Color.Black));
+			AddNewPiece('b', 7, new Pawn(Board, Color.Black));
+			AddNewPiece('c', 7, new Pawn(Board, Color.Black));
+			AddNewPiece('d', 7, new Pawn(Board, Color.Black));
+			AddNewPiece('e', 7, new Pawn(Board, Color.Black));
+			AddNewPiece('f', 7, new Pawn(Board, Color.Black));
+			AddNewPiece('g', 7, new Pawn(Board, Color.Black));
+			AddNewPiece('h', 7, new Pawn(Board, Color.Black));
 		}
 
 		public Piece ExecuteMovement(Position origin, Position destination)
@@ -173,7 +195,7 @@ namespace Chess
 			}
 		}
 
-		private Piece King(Color color)
+		private Piece KingPiece(Color color)
 		{
 			foreach (Piece piece in PiecesInPlay(color))
 			{
@@ -191,11 +213,12 @@ namespace Chess
 		//The method below tests whether a king is in check.
 		public bool IsInCheck(Color color)
 		{
-			Piece king = King(color);
+			Piece king = KingPiece(color);
 			if(king == null) //this is not supposed to happen
 			{
 				throw new BoardException("There is no " + color + " king playing.");
 			}
+
 			foreach (Piece piece in PiecesInPlay(AdversaryColor(color)))
 			{
 				bool[,] matrix = piece.PossibleMovements();

@@ -17,6 +17,7 @@ namespace Chess
 					try
 					{
 						Console.Clear();
+						Console.WriteLine("User Guide: K-King; B-Bishop; H-Knight; R-Rook; Q-Queen; P-Pawn");
 						Screen.PrintMatch(match);
 
 						Console.WriteLine();

@@ -3,18 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Chess
+namespace Chess.ChessLayer
 {
-	class King : Piece
+	class Knight : Piece
 	{
-		public King(ChessBoard Board, Color Color) : base(Board, Color)
+		public Knight(ChessBoard Board, Color Color) : base(Board, Color)
 		{
 
 		}
 
 		public override string ToString()
 		{
-			return "K";
+			return "H";
 		}
 
 		private bool AllowedToMove(Position position)
@@ -29,55 +29,49 @@ namespace Chess
 
 			Position position = new Position(0, 0);
 
-			//North
-			position.DefineValues(Position.Row - 1, Position.Column);
-			if (Board.IsValid(position) && AllowedToMove(position)){
-				matrix[position.Row, position.Column] = true;
-			}
-
-			//North-East
-			position.DefineValues(Position.Row - 1, Position.Column + 1);
-			if (Board.IsValid(position) && AllowedToMove(position)){
-				matrix[position.Row, position.Column] = true;
-			}
-
-			//East
-			position.DefineValues(Position.Row, Position.Column + 1);
+			position.DefineValues(Position.Row - 1, Position.Column - 2);
 			if (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
 			}
 
-			//South-East
-			position.DefineValues(Position.Row + 1, Position.Column + 1);
+			position.DefineValues(Position.Row - 2, Position.Column - 1);
 			if (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
 			}
 
-			//South
-			position.DefineValues(Position.Row + 1, Position.Column);
+			position.DefineValues(Position.Row - 2, Position.Column + 1);
 			if (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
 			}
 
-			//South-West
-			position.DefineValues(Position.Row + 1, Position.Column - 1);
+			position.DefineValues(Position.Row - 1, Position.Column + 2);
 			if (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
 			}
 
-			//West
-			position.DefineValues(Position.Row, Position.Column - 1);
+			position.DefineValues(Position.Row + 1, Position.Column + 2);
 			if (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
 			}
 
-			//North-West
-			position.DefineValues(Position.Row - 1, Position.Column - 1);
+			position.DefineValues(Position.Row + 2, Position.Column + 1);
+			if (Board.IsValid(position) && AllowedToMove(position))
+			{
+				matrix[position.Row, position.Column] = true;
+			}
+
+			position.DefineValues(Position.Row + 2, Position.Column - 1);
+			if (Board.IsValid(position) && AllowedToMove(position))
+			{
+				matrix[position.Row, position.Column] = true;
+			}
+
+			position.DefineValues(Position.Row + 1, Position.Column - 2);
 			if (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
@@ -85,6 +79,5 @@ namespace Chess
 
 			return matrix;
 		}
-
 	}
 }
