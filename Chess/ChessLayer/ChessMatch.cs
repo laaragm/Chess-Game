@@ -126,8 +126,15 @@ namespace Chess
 				Check = false;
 			}
 
-			Turn++;
-			ChangePlayer();
+			if (TestCheckMate(AdversaryColor(ActualPlayer)))
+			{
+				EndedMatch = true;
+			}
+			else
+			{
+				Turn++;
+				ChangePlayer();
+			}
 		}
 
 		private void UndoMovement(Position origin, Position destination, Piece capturedPiece)
@@ -199,6 +206,41 @@ namespace Chess
 			}
 
 			return false;
+		}
+
+		//Checkmate is a game position in chess and other chess-like games in which a player's king is 
+		//in check (threatened with capture) and there is no way to remove the threat.
+		public bool TestCheckMate(Color color)
+		{
+			if (!IsInCheck(color))
+			{
+				return false;
+			}
+
+			foreach (Piece piece in PiecesInPlay(color))
+			{
+				bool[,] matrix = piece.PossibleMovements();
+				for (int i = 0; i < Board.Rows; i++)
+				{
+					for (int j = 0; j < Board.Columns; j++)
+					{
+						if (matrix[i, j])
+						{
+							Position origin = piece.Position;
+							Position destination = new Position(i, j);
+							Piece capturedPiece = ExecuteMovement(origin, destination);
+							bool checkTest = IsInCheck(color);
+							UndoMovement(origin, destination, capturedPiece);
+							if (!checkTest)
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
+
+			return true;
 		}
 
 		private Color AdversaryColor(Color color)
