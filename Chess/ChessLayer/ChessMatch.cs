@@ -15,6 +15,7 @@ namespace Chess
 		public bool EndedMatch { get; private set; }
 		private HashSet<Piece> Pieces; //in order to store all the pieces from the match
 		private HashSet<Piece> Captured; 
+		public bool Check { get; private set; }
 
 		public ChessMatch()
 		{
@@ -23,6 +24,8 @@ namespace Chess
 			ActualPlayer = Color.White;
 			Pieces = new HashSet<Piece>();
 			Captured = new HashSet<Piece>();
+			EndedMatch = false;
+			Check = false;
 
 			GetBoardReady();
 		}
@@ -50,7 +53,7 @@ namespace Chess
 			AddNewPiece('d', 8, new King(Board, Color.Black));
 		}
 
-		public void ExecuteMovement(Position origin, Position destination)
+		public Piece ExecuteMovement(Position origin, Position destination)
 		{
 			Piece piece = Board.RemovePiece(origin);
 			piece.IncreaseMovementCount();
@@ -60,6 +63,8 @@ namespace Chess
 			{
 				Captured.Add(capturedPiece);
 			}
+
+			return capturedPiece;
 		}
 
 		public HashSet<Piece> CapturedPieces(Color color)
@@ -75,7 +80,7 @@ namespace Chess
 
 			return aux;
 		}
-
+		
 		public HashSet<Piece> PiecesInPlay(Color color)
 		{
 			HashSet<Piece> aux = new HashSet<Piece>();
@@ -105,9 +110,36 @@ namespace Chess
 
 		public void PerformMovement(Position origin, Position destination)
 		{
-			ExecuteMovement(origin, destination);
+			Piece capturedPiece = ExecuteMovement(origin, destination);
+
+			if (IsInCheck(ActualPlayer))
+			{
+				UndoMovement(origin, destination, capturedPiece);
+				throw new BoardException("You cannot put your own king in check.");
+			}
+
+			if (IsInCheck(AdversaryColor(ActualPlayer))){
+				Check = true;
+			}
+			else
+			{
+				Check = false;
+			}
+
 			Turn++;
 			ChangePlayer();
+		}
+
+		private void UndoMovement(Position origin, Position destination, Piece capturedPiece)
+		{
+			Piece piece = Board.RemovePiece(destination);
+			piece.DecreaseMovementCount();
+			if (capturedPiece != null)
+			{
+				Board.AddPiece(capturedPiece, destination);
+				Captured.Remove(capturedPiece);
+			}
+			Board.AddPiece(piece, origin);
 		}
 
 		public void ValidateOriginPosition(Position position)
@@ -131,6 +163,53 @@ namespace Chess
 			if (!Board.Piece(origin).IsAllowedMoveTo(destination))
 			{
 				throw new BoardException("Invalid destination position.");
+			}
+		}
+
+		private Piece King(Color color)
+		{
+			foreach (Piece piece in PiecesInPlay(color))
+			{
+				if (piece is King)
+				{
+					return piece;
+				}
+			}
+
+			return null;
+		}
+
+		//A check is a condition in chess that occurs when a player's king is under threat of capture 
+		//on their opponent's next turn. 
+		//The method below tests whether a king is in check.
+		public bool IsInCheck(Color color)
+		{
+			Piece king = King(color);
+			if(king == null) //this is not supposed to happen
+			{
+				throw new BoardException("There is no " + color + " king playing.");
+			}
+			foreach (Piece piece in PiecesInPlay(AdversaryColor(color)))
+			{
+				bool[,] matrix = piece.PossibleMovements();
+				if(matrix[king.Position.Row, king.Position.Column])
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private Color AdversaryColor(Color color)
+		{
+			if (color == Color.White)
+			{
+				return Color.Black;
+			}
+			else
+			{
+				return Color.White;
 			}
 		}
 	}

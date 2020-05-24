@@ -31,6 +31,10 @@ namespace Chess
 			Console.WriteLine();
 			Console.WriteLine("Turn: " + match.Turn);
 			Console.WriteLine("Waiting for movement: " + match.ActualPlayer);
+			if (match.Check)
+			{
+				Console.WriteLine("Check!");
+			}
 		}
 
 		private static void PrintCapturedPieces(ChessMatch match)
