@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Chess;
+using System.Collections.Generic;
 
 namespace Chess
 {
@@ -20,6 +21,40 @@ namespace Chess
 				Console.WriteLine();
 			}
 			Console.WriteLine("  a b c d e f g h");
+		}
+
+		public static void PrintMatch(ChessMatch match)
+		{
+			Screen.PrintBoard(match.Board);
+			Console.WriteLine();
+			PrintCapturedPieces(match);
+			Console.WriteLine();
+			Console.WriteLine("Turn: " + match.Turn);
+			Console.WriteLine("Waiting for movement: " + match.ActualPlayer);
+		}
+
+		private static void PrintCapturedPieces(ChessMatch match)
+		{
+			Console.WriteLine("Captured Pieces: ");
+			Console.Write("White: ");
+			PrintSet(match.CapturedPieces(Color.White));
+			Console.WriteLine();
+			Console.Write("Black: ");
+			ConsoleColor defaultColor = Console.ForegroundColor;
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			PrintSet(match.CapturedPieces(Color.Black));
+			Console.ForegroundColor = defaultColor;
+			Console.WriteLine();
+		}
+
+		private static void PrintSet(HashSet<Piece> piecesSet)
+		{
+			Console.Write("[");
+			foreach (Piece piece in piecesSet)
+			{
+				Console.Write(piece + " ");
+			}
+			Console.Write("]");
 		}
 
 		public static void PrintBoard(ChessBoard board, bool[,] possiblePositions)
