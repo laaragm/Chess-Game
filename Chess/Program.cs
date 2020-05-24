@@ -14,22 +14,38 @@ namespace Chess
 
 				while (!match.EndedMatch)
 				{
-					Console.Clear();
-					Screen.PrintBoard(match.Board);
+					try
+					{
+						Console.Clear();
+						Screen.PrintBoard(match.Board);
 
-					Console.WriteLine();
-					Console.Write("Origin: ");
-					Position origin = Screen.ReadChessPosition().ToPosition();
+						Console.WriteLine();
+						Console.WriteLine("Turn: " + match.Turn);
+						Console.WriteLine("Waiting for movement: " + match.ActualPlayer);
 
-					bool[,] possiblePositions = match.Board.Piece(origin).PossibleMovements();
+						Console.WriteLine();
+						Console.Write("Origin: ");
+						Position origin = Screen.ReadChessPosition().ToPosition();
+						match.ValidateOriginPosition(origin);
 
-					Console.Clear();
-					Screen.PrintBoard(match.Board, possiblePositions);
+						bool[,] possiblePositions = match.Board.Piece(origin).PossibleMovements();
 
-					Console.Write("Destination: ");
-					Position destination = Screen.ReadChessPosition().ToPosition();
+						Console.Clear();
+						Screen.PrintBoard(match.Board, possiblePositions);
 
-					match.ExecuteMovement(origin, destination);
+						Console.WriteLine();
+						Console.Write("Destination: ");
+						Position destination = Screen.ReadChessPosition().ToPosition();
+						match.ValidateDestinationPosition(origin, destination);
+
+						match.PerformMovement(origin, destination);
+					}
+					catch (BoardException exception)
+					{
+						Console.WriteLine(exception.Message);
+						Console.WriteLine("Press Enter to continue...");
+						Console.ReadLine();
+					}
 				}
 			}
 			catch (BoardException exception)

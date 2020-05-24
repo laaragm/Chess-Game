@@ -35,5 +35,27 @@ namespace Chess.Board
 		{
 			return PossibleMovements()[position.Row, position.Column];
 		}
+
+		public bool IsThereAPossibleMovement()
+		{
+			bool[,] matrix = PossibleMovements();
+			for (int i = 0; i < Board.Rows; i++)
+			{
+				for (int j = 0; j < Board.Columns; j++)
+				{
+					if (matrix[i, j])
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		public bool IsAllowedMoveTo(Position position)
+		{
+			return PossibleMovements()[position.Row, position.Column];
+		}
 	}
 }
