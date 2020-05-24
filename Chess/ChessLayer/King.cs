@@ -7,9 +7,10 @@ namespace Chess
 {
 	class King : Piece
 	{
-		public King(ChessBoard Board, Color Color) : base(Board, Color)
+		private ChessMatch Match;
+		public King(ChessBoard Board, Color Color, ChessMatch match) : base(Board, Color)
 		{
-
+			Match = match;
 		}
 
 		public override string ToString()
@@ -21,6 +22,12 @@ namespace Chess
 		{
 			Piece piece = Board.Piece(position);
 			return (piece == null) || (piece.Color != Color);
+		}
+
+		private bool TestRookToCastling(Position position)
+		{
+			Piece piece = Board.Piece(position);
+			return (piece != null) && (piece is Rook) && (piece.Color == Color) && (piece.MovementsCount == 0);
 		}
 
 		public override bool[,] PossibleMovements()
@@ -81,6 +88,35 @@ namespace Chess
 			if (Board.IsValid(position) && AllowedToMove(position))
 			{
 				matrix[position.Row, position.Column] = true;
+			}
+
+			//Special move: Castling
+			//When there is an open space between your king and rook, then you can do the castling move and you 
+			//do it by moving your king two squares in the direction of the rook, and then the rook jumps over him.
+			if ((MovementsCount == 0) && (!Match.Check))
+			{
+				Position positionR1 = new Position(Position.Row, Position.Column + 3);
+				if (TestRookToCastling(positionR1))
+				{
+					Position p1 = new Position(Position.Row, Position.Column + 1);
+					Position p2 = new Position(Position.Row, Position.Column + 2);
+					if ((Board.Piece(p1) == null) && (Board.Piece(p2) == null))
+					{
+						matrix[Position.Row, Position.Column + 2] = true;
+					}
+				}
+
+				Position positionR2 = new Position(Position.Row, Position.Column - 4);
+				if (TestRookToCastling(positionR2))
+				{
+					Position p1 = new Position(Position.Row, Position.Column - 1);
+					Position p2 = new Position(Position.Row, Position.Column - 2);
+					Position p3 = new Position(Position.Row, Position.Column - 3);
+					if ((Board.Piece(p1) == null) && (Board.Piece(p2) == null) && (Board.Piece(p3) == null))
+					{
+						matrix[Position.Row, Position.Column - 2] = true;
+					}
+				}
 			}
 
 			return matrix;

@@ -43,7 +43,7 @@ namespace Chess
 			AddNewPiece('b', 1, new Knight(Board, Color.White));
 			AddNewPiece('c', 1, new Bishop(Board, Color.White));
 			AddNewPiece('d', 1, new Queen(Board, Color.White));
-			AddNewPiece('e', 1, new King(Board, Color.White));
+			AddNewPiece('e', 1, new King(Board, Color.White, this));
 			AddNewPiece('f', 1, new Bishop(Board, Color.White));
 			AddNewPiece('g', 1, new Knight(Board, Color.White));
 			AddNewPiece('h', 1, new Rook(Board, Color.White));
@@ -61,7 +61,7 @@ namespace Chess
 			AddNewPiece('b', 8, new Knight(Board, Color.Black));
 			AddNewPiece('c', 8, new Bishop(Board, Color.Black));
 			AddNewPiece('d', 8, new Queen(Board, Color.Black));
-			AddNewPiece('e', 8, new King(Board, Color.Black));
+			AddNewPiece('e', 8, new King(Board, Color.Black, this));
 			AddNewPiece('f', 8, new Bishop(Board, Color.Black));
 			AddNewPiece('g', 8, new Knight(Board, Color.Black));
 			AddNewPiece('h', 8, new Rook(Board, Color.Black));
@@ -84,6 +84,24 @@ namespace Chess
 			if (capturedPiece != null)
 			{
 				Captured.Add(capturedPiece);
+			}
+
+			//Special move: Castling
+			if ((piece is King) && (destination.Column == origin.Column + 2)){
+				Position originR = new Position(origin.Row, origin.Column + 3);
+				Position destinationR = new Position(origin.Row, origin.Column + 1);
+				Piece R = Board.RemovePiece(originR);
+				R.IncreaseMovementCount();
+				Board.AddPiece(R, destinationR);
+			}
+
+			if ((piece is King) && (destination.Column == origin.Column - 2))
+			{
+				Position originR = new Position(origin.Row, origin.Column - 4);
+				Position destinationR = new Position(origin.Row, origin.Column - 1);
+				Piece R = Board.RemovePiece(originR);
+				R.IncreaseMovementCount();
+				Board.AddPiece(R, destinationR);
 			}
 
 			return capturedPiece;
@@ -169,6 +187,25 @@ namespace Chess
 				Captured.Remove(capturedPiece);
 			}
 			Board.AddPiece(piece, origin);
+
+			//Special move: Castling
+			if ((piece is King) && (destination.Column == origin.Column + 2))
+			{
+				Position originR = new Position(origin.Row, origin.Column + 3);
+				Position destinationR = new Position(origin.Row, origin.Column + 1);
+				Piece R = Board.RemovePiece(destinationR);
+				R.DecreaseMovementCount();
+				Board.AddPiece(R, originR);
+			}
+
+			if ((piece is King) && (destination.Column == origin.Column - 2))
+			{
+				Position originR = new Position(origin.Row, origin.Column - 4);
+				Position destinationR = new Position(origin.Row, origin.Column - 1);
+				Piece R = Board.RemovePiece(destinationR);
+				R.DecreaseMovementCount();
+				Board.AddPiece(R, originR);
+			}
 		}
 
 		public void ValidateOriginPosition(Position position)
