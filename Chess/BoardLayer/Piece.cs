@@ -31,11 +31,6 @@ namespace Chess.Board
 
 		public abstract bool[,] PossibleMovements();
 
-		public bool PossibleMovement(Position position)
-		{
-			return PossibleMovements()[position.Row, position.Column];
-		}
-
 		public bool IsThereAPossibleMovement()
 		{
 			bool[,] matrix = PossibleMovements();
